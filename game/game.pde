@@ -8,11 +8,10 @@ int gameWidth = 512;
 int gameHeight = 448;
 
 void setup() {
-
 }
 
 void settings() {
-    size(gameWidth, gameHeight);
+  size(gameWidth, gameHeight);
 }
 
 void draw() {
