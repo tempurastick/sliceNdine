@@ -46,7 +46,7 @@ void keyPressed() {
     if (selection == 0) {
       gameScreen();
     } else if (selection == 1) {
-      helpScreen ();
+      //helpScreen ();
     }
   }
 }

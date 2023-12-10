@@ -13,10 +13,14 @@ IntList resultList;
 
 KeysClass keysSetup;
 
+PFont pixeloid;
+
 void setup() {
 
   keysSetup = new KeysClass(5);
   keysSetup.createLists();
+  pixeloid = createFont("PixeloidMono.otf", 128);  
+  textFont(pixeloid);
 }
 
 void settings() {
@@ -24,7 +28,6 @@ void settings() {
 }
 
 void draw() {
-
   if (gameState == START_SCREEN) {
     startScreen();
   } else if (gameState == GAME) {

@@ -27,6 +27,10 @@ class KeysClass {
     marginY = 112;
     // space between tiles
     spacer = 8;
+
+    // somehow have to re-declare it inside an object
+    pixeloid = createFont("PixeloidMono.otf", 128);
+    textFont(pixeloid);
   }
 
   void createLists () {
