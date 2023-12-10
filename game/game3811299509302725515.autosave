@@ -7,16 +7,10 @@ int gameState = GAME;
 int gameWidth = 512;
 int gameHeight = 448;
 
-// keys list
-IntList keys;
-IntList resultList;
-
-KeysClass keysSetup;
+Game gameScreen;
 
 void setup() {
-
-  keysSetup = new KeysClass(5);
-  keysSetup.createLists();
+  gameScreen = new Game();
 }
 
 void settings() {
@@ -28,7 +22,7 @@ void draw() {
   if (gameState == START_SCREEN) {
     startScreen();
   } else if (gameState == GAME) {
-    gameScreen();
+    gameScreen.test();
   } else if (gameState == GAME_END) {
     gameEnd();
   }
