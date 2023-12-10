@@ -7,7 +7,16 @@ int gameState = GAME;
 int gameWidth = 512;
 int gameHeight = 448;
 
+// keys list
+IntList keys;
+IntList resultList;
+
+KeysClass keysSetup;
+
 void setup() {
+
+  keysSetup = new KeysClass(5);
+  keysSetup.createLists();
 }
 
 void settings() {
