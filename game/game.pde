@@ -16,8 +16,8 @@ KeysClass keysSetup;
 PFont pixeloid;
 
 void setup() {
-frameRate(30);
-  keysSetup = new KeysClass(5);
+
+  keysSetup = new KeysClass(4);
   //keysSetup.createLists();
   pixeloid = createFont("PixeloidMono.otf", 128);  
   textFont(pixeloid);
@@ -26,6 +26,7 @@ frameRate(30);
 void settings() {
   size(gameWidth, gameHeight);
 }
+
 
 void draw() {
   if (gameState == START_SCREEN) {

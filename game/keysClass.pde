@@ -1,11 +1,12 @@
 class KeysClass {
-  int keysIndex, left, right, up, down, tileSize, marginX, marginY, spacer;
+  int keysIndex, left, right, up, down, tileSize, marginX, marginY, spacer, currentSlot, delayTime;
+  boolean keyCheck;
 
   KeysClass(int keysLength ) {
     // array of accepted keys. Can be appended and removed
     keys = new IntList();
     resultList = new IntList();
-
+    rectMode(CORNER);
     keys.append(LEFT);
     keys.append(RIGHT);
     keys.append(UP);
@@ -42,122 +43,117 @@ class KeysClass {
 
     // shuffles order inside the keys
     keys.shuffle();
+
+    currentSlot = 0;
+    delayTime = 50; // testing diff values rn
   }
 
   void createLists () {
+    keyCheck = symbolCheck(keyCheck);
+    // making sure we don't go out of bounds (array.length-1)
+    if ( currentSlot < keysIndex) {
+      int result = resultList.get(currentSlot);
+      char symbol = getSymbol(result);
+      float keyPosX = returnPosition(marginX*currentSlot);
 
-    for (int i = 0; i < keysIndex; i++) {
-      int result = keys.get(i);
-      textSize(tileSize);
-      //println(i);
-      //println(result);
+      // needs to be replaced with Pimage logic
+      int originalColor = g.fillColor;
 
-      for ( int slot = 0; slot < keysIndex; slot++) {
-        // right now this counts down for each slot in every slot
-        fill(200, 0, 200);
+      if (keyPressed && matchSlot(result)) {
+        if (keyCode == result) {
+          // correct input
 
-        if ( slot == i ) {
-          //println("slot", slot);
-          // rn it's exactly at the edge so that needs to be fixed
-          //rect(marginX+marginX*slot, marginY, tileSize, tileSize);
+          // replace this with Pimage
+          fill(0, 255, 0); // Set color to green for correct input
+          keyCheck = true;
 
-          if (result == left ) {
-            // replace text with graphics
-            text("<", marginX+marginX*slot, marginY);
+          delay(delayTime); // delay for input
+          // catch
+          println("currentSlot:", currentSlot, "result:", result, "keyCode:", keyCode);
+          currentSlot++;
+          createLists(); // recursive function
+        } else {
+          // incorrect input
 
-            while ( slot == i) {
-              println("slot", slot);
-              println("i", i);
+          // replace this with Pimage
+          fill(255, 0, 0); // Set color to red for incorrect input
+          keyCheck = false;
 
-              if (keyPressed) {
-                if ( keyCode == result && slot == i) {
-                  // code if input is correct
-                  text("good job", 250, 50);
-                } else if (keyCode != result && slot == i) {
-                  // code if input is incorrect
-                  text("wrong input, right slot", 250, 150);
-                } else if ( slot != i ) {
-                  text("wrong slot", 250, 150);
-                  // wait a second we don't exactly save the slot
-                  // so this never turns true
-                }
-              }
-              break;
-            }
-          } else if ( result == right ) {
-            text(">", marginX+marginX*slot, marginY);
-
-
-            while ( slot == i) {
-              println("slot", slot);
-              println("i", i);
-              fill(255, 255, 0);
-              if (keyPressed) {
-                if ( keyCode == result && slot == i) {
-                  // code if input is correct
-                  text("good job", 250, 50);
-                } else if (keyCode != result && slot == i) {
-                  // code if input is incorrect
-                  text("wrong input, right slot", 250, 150);
-                } else if ( slot != i ) {
-                  text("wrong slot", 250, 150);
-                  // wait a second we don't exactly save the slot
-                }
-              }
-              break;
-            }
-
-            /*
-            while ( slot == i ) {
-             // println says 0 but we'd still get double input
-             println(result);
-             if ( slot == i) {
-             if (keyPressed) {
-             if ( keyCode == result && slot == i) {
-             // code if input is correct
-             text("good job", 250, 50);
-             } else if (keyCode != result && slot == i) {
-             // code if input is incorrect
-             text("wrong input, right slot", 250, 150);
-             }
-             }
-             }
-             break;
-             }
-             */
-          } else if ( result == up ) {
-            text("^", marginX+marginX*slot, marginY);
-          } else if ( result == down ) {
-            text("v", marginX+marginX*slot, marginY);
-          }
-
-          /* right now the issue is we're checking everything more than once so we kind of
-           * need to move from case to case instead...
-           *
-           */
+          delay(delayTime);
         }
+      } else {
+        fill(0); // Reset to default color
       }
 
-      // checking input against result
-      /*
-      if (keyPressed) {
-       if ( keyCode == left ) {
-       rect(20, 20, 30, 30);
-       } else if ( keyCode == right ) {
-       rect(30, 40, 30, 30);
-       } else if ( keyCode == up) {
-       rect(50, 60, 30, 30);
-       } else if ( keyCode == down ) {
-       rect(60, 70, 30, 30);
-       }
-       }
-       */
+      // logic needs to be replaced with PImage
+      // overwriting the declared symbols
+      if ( currentSlot == 0) {
+        text(symbol, keyPosX+spacer, marginY);
+      } else {
+        text(symbol, keyPosX, marginY);
+      }
+      // restoring to default colour
+      fill(originalColor);
+    } else {
+      // done with all the slots
+      println("All slots checked");
+      startNewLevel();
     }
   }
-}
 
-void shuffleList() {
-}
 
-void checkKeys() {
+  void displayKeys() {
+    for ( int i = 0; i < keysIndex; i++) {
+      float keyPosX = returnPosition(marginX*i);
+      int result = resultList.get(i);
+      char symbol = getSymbol(result);
+      if ( i == 0 ) {
+        // REPLACE WITH PIMAGE
+        text(symbol, spacer+keyPosX, marginY);
+      } else {
+        // REPLACE WITH PIMAGE
+        text(symbol, keyPosX, marginY);
+      }
+    }
+  }
+
+  float returnPosition ( float posX ) {
+    return posX;
+  }
+
+  boolean symbolCheck ( boolean check ) {
+    return check;
+  }
+
+  // if we have a symbol that occupies two concurrent slots
+  boolean matchSlot(int symbol) {
+    for (int i = currentSlot; i < keysIndex; i++) {
+      if (resultList.get(i) == symbol) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  char getSymbol(int keyCode) {
+    if ( keyCode == left ) {
+      return '<';
+    } else if ( keyCode == right ) {
+      return '>';
+    } else if ( keyCode == up ) {
+      return '^';
+    } else if ( keyCode == down ) {
+      return 'v';
+    }
+    return ' ';
+  }
+
+  void startNewLevel() {
+    currentSlot = 0;
+    resultList.clear();
+    for ( int i = 0; i < keysIndex; i++) {
+      int index = int(random(keys.size()));
+      resultList.append(keys.get(index));
+    }
+  }
 }
