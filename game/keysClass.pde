@@ -1,5 +1,5 @@
 class KeysClass {
-  int keysIndex, left, right, up, down, tileSize, marginX, marginY, spacer, currentSlot, delayTime;
+  int keysIndex, left, right, up, down, tileSize, marginX, marginY, spacer, currentSlot, delayTime, keysIndexMax;
   boolean keyCheck;
 
   KeysClass(int keysLength ) {
@@ -11,13 +11,16 @@ class KeysClass {
     keys.append(RIGHT);
     keys.append(UP);
     keys.append(DOWN);
+    keys.append('w');
+    keys.append('a');
     left = keys.get(0);
     right = keys.get(1);
     up = keys.get(2);
     down = keys.get(3);
 
     // total number in array
-    keysIndex = keys.size();
+    keysIndexMax = keys.size();
+    keysIndex = 3;
     keysLength = keysIndex;
 
     // px size of one tile
@@ -58,9 +61,10 @@ class KeysClass {
 
       // needs to be replaced with Pimage logic
       int originalColor = g.fillColor;
+         println("currentSlot:", currentSlot, "result:", result, "keyCode:", keyCode, "symbol:", symbol);
 
       if (keyPressed && matchSlot(result)) {
-        if (keyCode == result) {
+        if (keyCode == result || key == symbol) {
           // correct input
 
           // replace this with Pimage
@@ -69,7 +73,7 @@ class KeysClass {
 
           delay(delayTime); // delay for input
           // catch
-          println("currentSlot:", currentSlot, "result:", result, "keyCode:", keyCode);
+         
           currentSlot++;
           createLists(); // recursive function
         } else {
@@ -107,6 +111,7 @@ class KeysClass {
       float keyPosX = returnPosition(marginX*i);
       int result = resultList.get(i);
       char symbol = getSymbol(result);
+  
       if ( i == 0 ) {
         // REPLACE WITH PIMAGE
         text(symbol, spacer+keyPosX, marginY);
@@ -144,6 +149,11 @@ class KeysClass {
       return '^';
     } else if ( keyCode == down ) {
       return 'v';
+    } else if ( keyCode == 'w' || keyCode == 119 ) {
+      // since we're using char, to display the symbol we have to use the keyCode of the key
+    return 'w';
+    } else if ( keyCode == 'a' || keyCode == 65 ) {
+    return 'a';
     }
     return ' ';
   }
@@ -151,6 +161,10 @@ class KeysClass {
   void startNewLevel() {
     currentSlot = 0;
     resultList.clear();
+    if ( keysIndex < keysIndexMax ) {
+    keysIndex++;
+    }
+    
     for ( int i = 0; i < keysIndex; i++) {
       int index = int(random(keys.size()));
       resultList.append(keys.get(index));
