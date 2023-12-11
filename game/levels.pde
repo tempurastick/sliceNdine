@@ -5,4 +5,7 @@ void level(int highest) {
     //rect(0, 20+i, i, i+20); // testing
     i++;
   }
+
+  keysSetup.createLists();
+  keysSetup.displayKeys();
 }
