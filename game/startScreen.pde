@@ -1,8 +1,14 @@
 int selection = 0;
+PImage menu_photo;
 
 void startScreen () {
+  PFont font; //schriftart ändern
+  font = createFont("PixeloidMono.otf", 128);
+  textFont(font);
+  
+  menu_photo = loadImage ("menu_background.jpg");
+  image (menu_photo,0,0);
 
-  background (#e4d5b7);
   fill (0);
   textSize (116);
   textAlign (CENTER);
@@ -15,10 +21,10 @@ void startScreen () {
   strokeWeight (0);
   text ("help", gameWidth/2, gameHeight-150);
 
-  fill(3, 3, 3, 0);
+  noFill();
   rectMode(CENTER);
   rect(gameWidth/2, gameHeight-213, 184, 50);
-  fill(3, 3, 3, 0);
+  noFill();
   rectMode(CENTER);
   rect(gameWidth/2, gameHeight-162, 184, 50);
 
@@ -33,6 +39,7 @@ void startScreen () {
     rectMode(CENTER);
     rect(gameWidth/2, gameHeight-162, 184, 50);
   }
+ 
 }
 void keyPressed() {
   if (keyCode == DOWN || keyCode == UP) {
@@ -44,9 +51,9 @@ void keyPressed() {
     }
   } else if (keyCode == ENTER) {
     if (selection == 0) {
-      gameScreen();
+      gameState = GAME;
     } else if (selection == 1) {
-      //helpScreen ();
+      gameState = HELP;
     }
   }
 }

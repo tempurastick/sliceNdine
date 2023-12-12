@@ -9,5 +9,9 @@ void gameScreen() {
   background(255);
   // LEVEL 1: Four slots
   level(4);
+  
+    beginnTime.countDown ();
+      fill(0);
+  text (beginnTime.getTime(), 70, 60);
   gameState = GAME;
 }
