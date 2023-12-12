@@ -9,6 +9,10 @@ import java.util.Arrays;
 int gameWidth = 512;
 int gameHeight = 448;
 
+int fontSizeMd = 42;
+int fontSizeSm = 24;
+int fontSizeXs = 12;
+
 // keys list
 IntList keys;
 IntList resultList;
@@ -17,16 +21,24 @@ KeysClass keysSetup;
 
 PFont pixeloid;
 
-void setup() {
+PImage btn;
+PImage banner;
+PImage tile;
 
+void setup() {
+  btn = loadImage ("btn.png");
+  banner = loadImage ("flag_banner.png");
+  tile = loadImage ("tile.png");
   keysSetup = new KeysClass(4);
   //keysSetup.createLists();
-  pixeloid = createFont("PixeloidMono.otf", 128);  
-  textFont(pixeloid);
+  pixeloid = createFont("PixeloidMono.otf", 128);
+  textFont(pixeloid, fontSizeMd);
+    textSize(fontSizeMd);
 }
 
 void settings() {
   size(gameWidth, gameHeight);
+
 }
 
 

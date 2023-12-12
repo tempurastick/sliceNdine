@@ -10,7 +10,7 @@ void startScreen () {
   image (menu_photo,0,0);
 
   fill (0);
-  textSize (116);
+  textSize (fontSizeMd);
   textAlign (CENTER);
   text ("Menu", gameWidth/2, gameHeight-300);
 
