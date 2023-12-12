@@ -57,16 +57,15 @@ class KeysClass {
       // int index = int(random(keys.size())); // for random output
 
       //resultList.append(keys.get(index)); // for random output
+
       // storing the random numbers from keys
       resultList.append(keys.get(i)); // for non random
+      // shuffles order inside the keys
       resultList.shuffle();
     }
 
-    // shuffles order inside the keys
-
-
     currentSlot = 0;
-    delayTime = 100; // testing diff values rn
+    delayTime = 100; // to prevent double input
 
     // threshold for bonus points
     timeThreshold = 100;
@@ -119,13 +118,12 @@ class KeysClass {
 
         delay(delayTime); // delay for input
         // catch
-        println(millis());
         currentSlot++;
         keyPressedLogic(); // recursive function
       } else if ( keyCode != result || key != symbol) {
         // incorrect input
         if (keyPressed) {
-          // Set color to red for incorrect input 
+          // Set color to red for incorrect input
           fill(255, 0, 0);
 
           // minus points
@@ -133,7 +131,11 @@ class KeysClass {
 
           // State of current pressed key
           keyStates[currentSlot] = false;
-          score = score - 1;
+          
+          // we don't want the score value to be negative 0
+          if (score > 0) {
+            score = score - 5;
+          }
           score(score);
         }
 
@@ -154,7 +156,7 @@ class KeysClass {
       // restoring to default colour
       fill(originalColor);
     } else {
-      
+
       score = score+15;
       score(score);
 
@@ -169,7 +171,6 @@ class KeysClass {
 
     if ( elapsedTime <= timeThreshold) {
       score = score+5;
-      println("bonus", score, "elapsedTime", elapsedTime);
     }
   }
 
@@ -189,17 +190,14 @@ class KeysClass {
       int result = resultList.get(i);
       char symbol = getSymbol(result);
 
-      // println("i: " + i + ", keyStates[i]: " + keyStates[i]);
-
       if ( keyStates[i] ) {
-        // REPLACE WITH PIMAGE
         fill(0, 255, 0);
-
+        // successful input
         image(tile, tilePosX, marginY);
         text(symbol, keyPosX, keyPosY);
       } else {
-        // REPLACE WITH PIMAGE
         fill(0);
+        // default state of the tiles
         image(tile, tilePosX, marginY);
         text(symbol, keyPosX, keyPosY);
       }
@@ -256,7 +254,6 @@ class KeysClass {
   void startNewLevel() {
     currentSlot = 0;
     resultList.clear();
-    println("startNewLevel");
 
     // making sure we don't go out of bound
     if ( keysIndex < keysIndexMax ) {
@@ -265,10 +262,7 @@ class KeysClass {
       keyStates = new boolean[keysIndex];
       Arrays.fill(keyStates, false);
     }
-
-    println("keysIndex: " + keysIndex);
-    println("keyStates.length: " + keyStates.length);
-
+    
     // clearing filled slots
     Arrays.fill(keyStates, false);
 

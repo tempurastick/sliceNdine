@@ -10,6 +10,11 @@ class Timer {
   {
     return(startTime); //returns current time
   }
+  
+  String formatTimer() {
+  int timeInt = int(startTime);
+  return nf(timeInt, 2); // this way it's a countdown without decimals
+  }
 
   void setTime (float set) //set the time
   {
