@@ -6,6 +6,14 @@ void level(int highest) {
     i++;
   }
 
-  keysSetup.createLists();
+  if (keyPressed) {
+    keysSetup.keyPressed();
+    
+    // otherwise else would unintentionally fire
+    keysSetup.checkInputDelay();
+  }
+
   keysSetup.displayKeys();
+  keysSetup.displayScore();
+  keysSetup.autoProceed();
 }
