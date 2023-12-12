@@ -28,6 +28,13 @@ class Timer {
       startTime = 0;
     }
   }
+  
+  void changeScreen() {
+      if ( startTime <= 0) {
+      gameState = GAME_END;
+      gameEnd();
+    }
+  }
 }
 
 Timer beginnTime = new Timer(20); //Timer starts at 20sek.

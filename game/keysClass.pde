@@ -1,5 +1,6 @@
 class KeysClass {
-  int keysIndex, left, right, up, down, tileSize, marginX, marginY, spacer, currentSlot, delayTime, score, keysIndexMax;
+  int keysIndex, left, right, up, down, tileSize, spacer, currentSlot, delayTime, score, keysIndexMax;
+  float marginX, marginY;
   boolean keyCheck;
   boolean[] keyStates;
 
@@ -38,10 +39,11 @@ class KeysClass {
     // spacing from tiles to top border
     marginY = 112;
     // space between tiles
-    spacer = 8;
+    spacer = 4;
 
     // somehow have to re-declare it inside an object
     pixeloid = createFont("PixeloidMono.otf", 128);
+
     textFont(pixeloid);
     keys.shuffle();
 
@@ -138,15 +140,14 @@ class KeysClass {
       // logic needs to be replaced with PImage
       // overwriting the declared symbols
       if ( currentSlot == 0) {
+        // PIMAGE
         text(symbol, keyPosX+spacer, marginY);
       } else if ( keyPosX < width ) {
         // TODO: if it's outside of with it needs to be moved
         text(symbol, keyPosX, marginY);
-        println("keyPosX", keyPosX);
       } else {
         keyPosX = marginX;
         text(symbol, keyPosX, marginY*marginY);
-        println("keyPosX", keyPosX);
       }
       // restoring to default colour
       fill(originalColor);
@@ -167,16 +168,21 @@ class KeysClass {
       int result = resultList.get(i);
       char symbol = getSymbol(result);
 
-      println("i: " + i + ", keyStates[i]: " + keyStates[i]);
+      // println("i: " + i + ", keyStates[i]: " + keyStates[i]);
 
       if ( keyStates[i] ) {
         // REPLACE WITH PIMAGE
         fill(0, 255, 0);
-        text(symbol, spacer+keyPosX, marginY);
+
+        // might need to remove this
+        println("marginX", marginX);
+        text(symbol, marginX+keyPosX, marginY);
+        image(tile, marginX+keyPosX, marginY);
       } else {
         // REPLACE WITH PIMAGE
         fill(0);
-        text(symbol, keyPosX, marginY);
+        text(symbol, marginX+keyPosX, marginY);
+        image(tile, marginX+keyPosX, marginY);
       }
     }
   }
@@ -255,15 +261,20 @@ class KeysClass {
     }
   }
 
+  int returnScore() {
+    return score;
+  }
+
   void autoProceed() {
     // once we hit all the keys, start new level
     if ( currentSlot == keysIndex ) {
       currentSlot = 0;
       startNewLevel();
+      score(score);
     }
   }
-  
-  
+
+
   void keyPressed() {
     keysSetup.keyPressedLogic();
   }

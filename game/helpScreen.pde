@@ -12,9 +12,9 @@ void helpScreen() {
   textFont(font);
 
   fill(0);
-  textSize(13);
+  textSize(fontSizeXs);
   text ("Gib die angezeigten Tasten so schnell wie möglich an", gameWidth/2, gameHeight-350);
-  textSize(15);
+  textSize(fontSizeXs);
   text ("Controls:", 50, gameHeight-300);
   text ("use the arrowkeys and keyboard", 200, gameHeight-250);
 
@@ -22,7 +22,7 @@ void helpScreen() {
   PFont font2;
   font2 = createFont("PixeloidSans-Bold.otf", 128);
   textFont(font2);
-  textSize(30);
+  textSize(fontSizeMd);
   text ("GUIDE FOR THE GAME", CENTER, gameHeight-400);
 
   /*
