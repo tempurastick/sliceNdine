@@ -11,7 +11,7 @@ int gameHeight = 448;
 
 int fontSizeMd = 42;
 int fontSizeSm = 24;
-int fontSizeXs = 12;
+int fontSizeXs = 14;
 
 // keys list
 IntList keys;
@@ -24,21 +24,28 @@ PFont pixeloid;
 PImage btn;
 PImage banner;
 PImage tile;
+PImage select;
+PImage roundBtn;
+PImage checkmark;
+PImage error;
 
 void setup() {
   btn = loadImage ("btn.png");
   banner = loadImage ("flag_banner.png");
   tile = loadImage ("tile.png");
+  select = loadImage ("select.png");
+  roundBtn = loadImage ("round_btn.png");
+  checkmark = loadImage ("check.png");
+  error = loadImage("cross.png");
   keysSetup = new KeysClass(4);
   //keysSetup.createLists();
   pixeloid = createFont("PixeloidMono.otf", 128);
   textFont(pixeloid, fontSizeMd);
-    textSize(fontSizeMd);
+  textSize(fontSizeMd);
 }
 
 void settings() {
   size(gameWidth, gameHeight);
-
 }
 
 

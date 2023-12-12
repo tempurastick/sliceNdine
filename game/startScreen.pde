@@ -5,41 +5,37 @@ void startScreen () {
   PFont font; //schriftart ändern
   font = createFont("PixeloidMono.otf", 128);
   textFont(font);
-  
+  float btnX = 160;
   menu_photo = loadImage ("menu_background.jpg");
-  image (menu_photo,0,0);
+  image (menu_photo, 0, 0);
 
   fill (0);
   textSize (fontSizeMd);
   textAlign (CENTER);
-  text ("Menu", gameWidth/2, gameHeight-300);
+  image(banner, 115, 85);
+  text ("Menu", gameWidth/2+5, gameHeight-300);
 
   //startScreen
   textSize (40);
-  text ("start", gameWidth/2, gameHeight-200);
+  image(btn, btnX, gameHeight-250 );
+  text ("start", gameWidth/2, gameHeight-210);
+
   //helpScreen
+  image(btn, btnX, gameHeight-190 );
   strokeWeight (0);
   text ("help", gameWidth/2, gameHeight-150);
-
-  noFill();
-  rectMode(CENTER);
-  rect(gameWidth/2, gameHeight-213, 184, 50);
-  noFill();
-  rectMode(CENTER);
-  rect(gameWidth/2, gameHeight-162, 184, 50);
 
   if (selection == 0)
   {
     fill(120, 70, 90, 100);
     rectMode(CENTER);
-    rect(gameWidth/2, gameHeight-213, 184, 50);
+    rect(gameWidth/2, gameHeight-223, 184, 50);
   } else {
     text ("help", gameWidth/2, gameHeight-150);
     fill(120, 70, 90, 100);
     rectMode(CENTER);
     rect(gameWidth/2, gameHeight-162, 184, 50);
   }
- 
 }
 void keyPressed() {
   if (keyCode == DOWN || keyCode == UP) {
@@ -54,6 +50,7 @@ void keyPressed() {
       gameState = GAME;
     } else if (selection == 1) {
       gameState = HELP;
+      helpScreen();
     }
   }
 }

@@ -1,6 +1,6 @@
 class KeysClass {
-  int keysIndex, left, right, up, down, tileSize, spacer, currentSlot, delayTime, score, keysIndexMax;
-  float marginX, marginY;
+  int keysIndex, left, right, up, down, tileSize, spacer, currentSlot, delayTime, score, keysIndexMax, bonusTime, timeThreshold;
+  float marginX, marginY, keyPosX, tilePosX, keyPosY, selectSize;
   boolean keyCheck;
   boolean[] keyStates;
 
@@ -35,11 +35,13 @@ class KeysClass {
     // px size of one tile
     tileSize = 56;
     // spacing from tiles to left border
-    marginX = 88;
+    marginX = 80;
     // spacing from tiles to top border
     marginY = 112;
     // space between tiles
-    spacer = 4;
+    spacer = 8;
+
+    selectSize = 64;
 
     // somehow have to re-declare it inside an object
     pixeloid = createFont("PixeloidMono.otf", 128);
@@ -65,6 +67,9 @@ class KeysClass {
 
     currentSlot = 0;
     delayTime = 100; // testing diff values rn
+
+    // threshold for bonus points
+    timeThreshold = 100;
   }
 
   void keyPressedLogic() {
@@ -85,86 +90,102 @@ class KeysClass {
       } else {
         nextResult = resultList.get(currentSlot);
       }
-      char nextSymbol = getSymbol(nextResult);
 
-      float keyPosX = returnPosition(marginX*currentSlot);
+      char nextSymbol = getSymbol(nextResult);
+      float tilePosX = returnPosition(marginX*currentSlot);
 
       // needs to be replaced with Pimage logic
       int originalColor = g.fillColor;
       delay(delayTime);
 
-
       if (keyCode == result || key == symbol) {
         // correct input
 
         // score added
-        score = score+20;
+        checkBonusTime();
+        score = score+5;
         score(score);
-        println(score(score));
 
         waitingForInput = true;
         lastInputTime = millis();
 
-
         // replace this with Pimage
         fill(0, 255, 0); // Set color to green for correct input
         keyCheck = true;
+        image(checkmark, keyPosX, keyPosY);
 
         // state of current pressed key
         keyStates[currentSlot] = true;
 
         delay(delayTime); // delay for input
         // catch
-
+        println(millis());
         currentSlot++;
         keyPressedLogic(); // recursive function
       } else if ( keyCode != result || key != symbol) {
         // incorrect input
         if (keyPressed) {
-          // replace this with Pimage
-          fill(255, 0, 0); // Set color to red for incorrect input
-          keyCheck = false;
+          // Set color to red for incorrect input 
+          fill(255, 0, 0);
 
-          // state of current pressed key
+          // minus points
+          image(error, keyPosX, keyPosY);
+
+          // State of current pressed key
           keyStates[currentSlot] = false;
-          score = score-1;
+          score = score - 1;
           score(score);
-          println("else", score(score));
         }
+
         delay(delayTime);
       } else {
         fill(0); // default
       }
 
-
-      // logic needs to be replaced with PImage
       // overwriting the declared symbols
+
       if ( currentSlot == 0) {
         // PIMAGE
-        text(symbol, keyPosX+spacer, marginY);
-      } else if ( keyPosX < width ) {
-        // TODO: if it's outside of with it needs to be moved
         text(symbol, keyPosX, marginY);
       } else {
-        keyPosX = marginX;
-        text(symbol, keyPosX, marginY*marginY);
+        tilePosX = marginX;
+        text(symbol, tilePosX, marginY*marginY);
       }
       // restoring to default colour
       fill(originalColor);
     } else {
+      
+      score = score+15;
+      score(score);
+
       // done with all the slots
       println("All slots checked");
       startNewLevel();
     }
   }
 
+  void checkBonusTime() {
+    int elapsedTime = millis() - bonusTime;
+
+    if ( elapsedTime <= timeThreshold) {
+      score = score+5;
+      println("bonus", score, "elapsedTime", elapsedTime);
+    }
+  }
+
   void displayScore() {
-    text(score, marginX, height);
+
+    image(select, width-selectSize-spacer, spacer);
+    textSize(fontSizeXs);
+    text(score, width-selectSize+spacer+spacer, spacer+fontSizeMd);
   }
 
   void displayKeys() {
     for ( int i = 0; i < keysIndex; i++) {
-      float keyPosX = returnPosition(marginX*i);
+      tilePosX = returnPosition(marginX*i);
+      tilePosX = tilePosX+spacer;
+      keyPosX = tilePosX+spacer*3;
+      keyPosY = marginY+(spacer*4);
       int result = resultList.get(i);
       char symbol = getSymbol(result);
 
@@ -174,15 +195,13 @@ class KeysClass {
         // REPLACE WITH PIMAGE
         fill(0, 255, 0);
 
-        // might need to remove this
-        println("marginX", marginX);
-        text(symbol, marginX+keyPosX, marginY);
-        image(tile, marginX+keyPosX, marginY);
+        image(tile, tilePosX, marginY);
+        text(symbol, keyPosX, keyPosY);
       } else {
         // REPLACE WITH PIMAGE
         fill(0);
-        text(symbol, marginX+keyPosX, marginY);
-        image(tile, marginX+keyPosX, marginY);
+        image(tile, tilePosX, marginY);
+        text(symbol, keyPosX, keyPosY);
       }
     }
   }
@@ -276,6 +295,7 @@ class KeysClass {
 
 
   void keyPressed() {
+    bonusTime = millis();
     keysSetup.keyPressedLogic();
   }
 }
