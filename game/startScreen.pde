@@ -1,7 +1,8 @@
-int selection = 0;
-PImage menu_photo;
+int selection = 0; //differentiate between start and help
 
 void startScreen () {
+
+  //background image
   PFont font; //schriftart ändern
   font = createFont("PixeloidMono.otf", 128);
   textFont(font);
@@ -9,11 +10,12 @@ void startScreen () {
   menu_photo = loadImage ("menu_background.jpg");
   image (menu_photo, 0, 0);
 
+  //title of the Game on banner
   fill (0);
   textSize (fontSizeMd);
   textAlign (CENTER);
-  image(banner, 115, 85);
-  text ("Menu", gameWidth/2+5, gameHeight-300);
+  image(btnS, 100, 85);
+  text ("Cooking Run", gameWidth/2+5, gameHeight-300);
 
   //startScreen
   textSize (40);
@@ -25,6 +27,8 @@ void startScreen () {
   strokeWeight (0);
   text ("help", gameWidth/2, gameHeight-150);
 
+
+  //select between start and help
   if (selection == 0)
   {
     fill(120, 70, 90, 100);
@@ -39,18 +43,30 @@ void startScreen () {
 }
 void keyPressed() {
   if (keyCode == DOWN || keyCode == UP) {
-    // Navigation zwischen den Optionen
+    // Navigation between to option with key up and down
     if (selection == 0) {
-      selection = 1; // Wechsle zur "Help" Option
+      selection = 1; // navigate to "Help"
     } else {
-      selection = 0; // Wechsle zur "Start" Option
+      selection = 0; // navigate to "Start"
     }
   } else if (keyCode == ENTER) {
-    if (selection == 0) {
+    if (selection == 0) {  //when start is clicked it travels to gameScreen
+
+      if ( beginnTime.getTime() <= 0) {
+        resetTimer();
+        keysSetup.resetScore();
+      }
+
       gameState = GAME;
-    } else if (selection == 1) {
+      gameScreen();
+    } else if (selection == 1) {  //when help is clicked it travels to helpScreen
       gameState = HELP;
       helpScreen();
     }
   }
+}
+
+void resetTimer() {
+  float newTime = 20;
+  beginnTime.resetTimer(newTime);
 }
