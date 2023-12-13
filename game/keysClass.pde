@@ -1,4 +1,5 @@
 class KeysClass {
+  // initializing variables needed inside the KeysClass object
   int keysIndex, left, right, up, down, tileSize, spacer, currentSlot, delayTime, score, keysIndexMax, bonusTime, timeThreshold;
   float marginX, marginY, keyPosX, tilePosX, keyPosY, selectSize;
   boolean keyCheck;
@@ -26,7 +27,7 @@ class KeysClass {
     up = keys.get(2);
     down = keys.get(3);
 
-    // total number in array
+    // total number in array, could be changed to commented out code, to give bigger combos.
     //keysIndexMax = keys.size();
     keysIndexMax = 6;
     keysIndex = 3;
@@ -47,23 +48,23 @@ class KeysClass {
     pixeloid = createFont("PixeloidMono.otf", 128);
 
     textFont(pixeloid);
+
+    // shuffling order inside the keys list
     keys.shuffle();
 
+    // for our input delay checker
     keyStates = new boolean[keysIndex];
     Arrays.fill(keyStates, false);
 
     // grabbing the number of elements in the list
     for (int i = 0; i < keysIndex; i++) {
-      // int index = int(random(keys.size())); // for random output
-
-      //resultList.append(keys.get(index)); // for random output
-
       // storing the random numbers from keys
       resultList.append(keys.get(i)); // for non random
       // shuffles order inside the keys
       resultList.shuffle();
     }
 
+    // starting at 0
     currentSlot = 0;
     delayTime = 100; // to prevent double input
 
@@ -71,6 +72,7 @@ class KeysClass {
     timeThreshold = 100;
   }
 
+  // to avoid double input
   void keyPressedLogic() {
     if (waitingForInput) {
       return;
@@ -79,12 +81,13 @@ class KeysClass {
     keyCheck = symbolCheck(keyCheck);
     // making sure we don't go out of bounds (array.length-1)
     if ( currentSlot < keysIndex) {
-
+      // result is the item in the current slot
       int result = resultList.get(currentSlot);
       char symbol = getSymbol(result);
       int nextResult;
 
       if ( currentSlot < keysIndex-1) {
+        // incrementing slot
         nextResult = resultList.get(currentSlot+1);
       } else {
         nextResult = resultList.get(currentSlot);
@@ -93,7 +96,6 @@ class KeysClass {
       char nextSymbol = getSymbol(nextResult);
       float tilePosX = returnPosition(marginX*currentSlot);
 
-      // needs to be replaced with Pimage logic
       int originalColor = g.fillColor;
       delay(delayTime);
 
@@ -105,10 +107,10 @@ class KeysClass {
         score = score+5;
         score(score);
 
+        // delay check
         waitingForInput = true;
         lastInputTime = millis();
 
-        // replace this with Pimage
         fill(0, 255, 0); // Set color to green for correct input
         keyCheck = true;
         image(checkmark, keyPosX, keyPosY);
@@ -117,7 +119,7 @@ class KeysClass {
         keyStates[currentSlot] = true;
 
         delay(delayTime); // delay for input
-        // catch
+        // jumping to next slot
         currentSlot++;
         keyPressedLogic(); // recursive function
       } else if ( keyCode != result || key != symbol) {
@@ -126,12 +128,12 @@ class KeysClass {
           // Set color to red for incorrect input
           fill(255, 0, 0);
 
-          // minus points
+          // minus points visual
           image(error, keyPosX, keyPosY);
 
           // State of current pressed key
           keyStates[currentSlot] = false;
-          
+
           // we don't want the score value to be negative 0
           if (score > 0) {
             score = score - 5;
@@ -146,8 +148,8 @@ class KeysClass {
 
       // overwriting the declared symbols
 
+      // this is our list of keys(symbols) being shown as text
       if ( currentSlot == 0) {
-        // PIMAGE
         text(symbol, keyPosX, marginY);
       } else {
         tilePosX = marginX;
@@ -157,15 +159,19 @@ class KeysClass {
       fill(originalColor);
     } else {
 
+      // bonus points when done with all slots
       score = score+15;
       score(score);
 
       // done with all the slots
       println("All slots checked");
+
+      // restarting
       startNewLevel();
     }
   }
 
+  // function to check for bonus points
   void checkBonusTime() {
     int elapsedTime = millis() - bonusTime;
 
@@ -174,13 +180,14 @@ class KeysClass {
     }
   }
 
+  // function to show score
   void displayScore() {
-
     image(select, width-selectSize-spacer, spacer);
     textSize(fontSizeXs);
     text(score, width-selectSize+spacer+spacer, spacer+fontSizeMd);
   }
 
+  // this is the keys(symbols) being shown
   void displayKeys() {
     for ( int i = 0; i < keysIndex; i++) {
       tilePosX = returnPosition(marginX*i);
@@ -229,6 +236,7 @@ class KeysClass {
     return false;
   }
 
+  // checking the keyboard input and if it's one of the following, return the correct symbol to be displayed
   char getSymbol(int keyCode) {
     if ( keyCode == left ) {
       return '<';
@@ -251,6 +259,7 @@ class KeysClass {
     return ' ';
   }
 
+  // function to start a new level. Resetting the list and putting the currentSlot back to 0
   void startNewLevel() {
     currentSlot = 0;
     resultList.clear();
@@ -262,24 +271,29 @@ class KeysClass {
       keyStates = new boolean[keysIndex];
       Arrays.fill(keyStates, false);
     }
-    
+
     // clearing filled slots
     Arrays.fill(keyStates, false);
 
     for ( int i = 0; i < keysIndex; i++) {
-      //int index = int(random(keys.size()));
-      // resultList.append(keys.get(index)); // for random output
       resultList.append(keys.get(i));
       resultList.shuffle();
     }
   }
 
+  // returning the score
   int returnScore() {
     return score;
   }
 
+  // resetting the score (needed for restart)
+  void resetScore() {
+    score = 0;
+    score(score);
+  }
+
+  // once we hit all the keys, start new level
   void autoProceed() {
-    // once we hit all the keys, start new level
     if ( currentSlot == keysIndex ) {
       currentSlot = 0;
       startNewLevel();
@@ -287,7 +301,7 @@ class KeysClass {
     }
   }
 
-
+// "wrapper" of the functionality, since we're checking for keyPressed
   void keyPressed() {
     bonusTime = millis();
     keysSetup.keyPressedLogic();

@@ -1,9 +1,10 @@
-int backgroundColor = 255;
+int backgroundColor = #fff6e5;
 PImage photo;
-int rectX = gameWidth-160;
-int rectY = gameHeight-121;
-int rectS = 111;
-int rectV = 58;
+//functions for the BACK button
+int rectX = gameWidth-225;
+int rectY = gameHeight-130;
+int rectS = 140;
+int rectV = 70;
 
 void helpScreen() {
   background (backgroundColor);
@@ -13,10 +14,12 @@ void helpScreen() {
 
   fill(0);
   textSize(fontSizeXs);
-  text ("Gib die angezeigten Tasten so schnell wie möglich an", gameWidth/2, gameHeight-350);
+  text ("type the shown keys as quickly as you can", gameWidth/2, gameHeight-350);
   textSize(fontSizeXs);
-  text ("Controls:", 50, gameHeight-300);
-  text ("use the arrowkeys and keyboard", 200, gameHeight-250);
+  text("correct inputs = +5 points", gameWidth/2, gameHeight-300);
+  text(" incorrect inputs = -5 points", gameWidth/2, gameHeight-260);
+  text ("Controls:", 50, gameHeight-200);
+  text ("use the arrowkeys and keyboard", 200, gameHeight-150);
 
 
   PFont font2;
@@ -25,21 +28,18 @@ void helpScreen() {
   textSize(fontSizeMd);
   text ("GUIDE FOR THE GAME", CENTER, gameHeight-400);
 
-  /*
-  photo = loadImage("Keyboard_letters.png");
-   imageMode (CENTER);
-   image(photo, 150, gameHeight-250, 175, 75);
-   
-   */
-
+  //button to go back to menu
   noFill();
-  rectMode(CENTER);
+  strokeWeight (2);
+  rectMode (CORNER);
   rect (rectX, rectY, rectS, rectV);
   text ("BACK", gameWidth-152, gameHeight-81);
 }
 
 void mousePressed() {
+  //if the BACK button is pressed it goes back to the start Screen
   if (mouseX >= rectX && mouseX <= rectX + rectS && mouseY >= rectY && mouseY <= rectY + rectV) {
     gameState = START_SCREEN;
+    startScreen();
   }
 }
